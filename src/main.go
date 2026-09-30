@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"github.com/Ingestdata/orion/src/javascript"
+	"github.com/Ingestdata/orion/src/r"
 	"github.com/Ingestdata/orion/src/scan"
 )
 
@@ -51,6 +52,7 @@ func main() {
 
 	registry := map[string]scan.Language{
 		"javascript": javascript.New(),
+		"r":          r.New(),
 	}
 
 	mux := http.NewServeMux()
