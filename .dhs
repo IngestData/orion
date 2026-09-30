@@ -1,0 +1,28 @@
+var version = "0.0.1";
+job("Orion", (j) => {
+
+	j.requirements((req) => {
+		req.workerTags = ["RBX"];
+	});
+
+	var orionImageName = "packages.intern.flubiostudios.com/ingestdata-services/orion";
+
+	var tags = ["" + orionImageName + ":" + version + "", "" + orionImageName + ":%build.buildnumber%", "" + orionImageName + ":latest"];
+
+	j.dockerLogin("packages.intern.flubiostudios.com", "%parameter.devhub_automation_username%", "%parameter.devhub_automation_password%");
+
+	for(var i = 0; i < tags.length; i=i+1) {
+		j.shellScript("Build", (s) => {
+			s.content = """
+				docker build -t {tag} . --pull
+			""".replace("{tag}", tags[i]);
+		});
+		j.shellScript("Push", (s) => {
+			s.content = """
+				docker push {tag}
+
+			""".replace("{tag}", tags[i]);
+		});
+	}
+
+});
